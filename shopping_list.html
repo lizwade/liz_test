@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping list example</title>
+    <style>
+      li {
+        margin-bottom: 10px;
+      }
+
+      li button {
+        font-size: 12px;
+        margin-left: 20px;
+        color: #666;
+      }
+    </style>
+  </head>
+  <body>
+
+    <h1>My shopping list</h1>
+
+    <div>
+      <label for="item">Enter a new item:</label>
+      <input type="text" name="item" id="item">
+      <button>Add item</button>
+    </div>
+
+    <ul>
+
+    </ul>
+
+    <script>
+        const shoppingList = document.querySelector("ul");
+        const addItemInput = document.querySelector("input");
+        const addItemButton = document.querySelector("button");
+
+        addItemButton.addEventListener("click", addItem);
+
+        function addItem() {
+            const itemToAdd = addItemInput.value;
+            addItemInput.value = "";
+            console.log(itemToAdd);
+            const listItem = document.createElement("li");
+            const span = document.createElement("span");
+            const deleteItemButton = document.createElement("button");
+            listItem.appendChild(span);
+            listItem.appendChild(deleteItemButton);
+            span.textContent = itemToAdd;
+            deleteItemButton.textContent = "delete";
+            shoppingList.appendChild(listItem);
+
+            // below is my attempt to delete the listItem. This removed the delete button but not the whole listItem with span.
+            // I also tried listItem.parentElement.remove and a few other similar things but they didn't work at all.
+            // deleteItemButton.addEventListener("click", listItem.remove );
+            
+            // I had to peek at the answer to get the below. I don't understand why we have to go all the way back up
+            // to the shopping list and remove a child, rather than removing a parent of the node we've set the listener on.
+            // I also don't understand how it can tell which listItem to remove (the one attached to this delete button).
+            // Also, I tried typing shoppingList.removeChild(listItem) as the argument (instead of an arrow function) and that
+            // didn't work either. Why, when in the other eventListener I was able to give just the name of a function.
+            // (Oh, maybe it requires the function as object, rather than me calling the function.)
+            deleteItemButton.addEventListener("click", () => {
+              shoppingList.removeChild(listItem); 
+            });
+            addItemInput.focus();
+
+        }
+
+        
+
+
+    </script>
+  </body>
+</html>
